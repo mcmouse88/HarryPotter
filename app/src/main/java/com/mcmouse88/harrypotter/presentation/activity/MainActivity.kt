@@ -1,7 +1,8 @@
-package com.mcmouse88.harrypotter
+package com.mcmouse88.harrypotter.presentation.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mcmouse88.harrypotter.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
