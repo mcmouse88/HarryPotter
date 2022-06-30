@@ -1,18 +1,21 @@
 package com.mcmouse88.harrypotter.presentation.viewmodel
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.navigation.NavController
 import com.mcmouse88.harrypotter.data.network.ApiRepository
+import com.mcmouse88.harrypotter.data.repository.UseCaseRepositoryImpl
 import com.mcmouse88.harrypotter.domain.entity.Character
+import com.mcmouse88.harrypotter.domain.usecase.GetCharacterDetailUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SplashViewModel : ViewModel() {
+class SplashViewModel(application: Application) : AndroidViewModel(application) {
 
     private val apiRepository = ApiRepository()
+    private val useCaseRepository = UseCaseRepositoryImpl(application)
+    private val getCharacterDetailUseCase = GetCharacterDetailUseCase(useCaseRepository)
 
     private val _listCharacter = MutableLiveData<List<Character>>()
     val listCharacter: LiveData<List<Character>>
@@ -27,5 +30,9 @@ class SplashViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun getDetailCharacter(navController: NavController, character: Character) {
+        getCharacterDetailUseCase.invoke(navController, character)
     }
 }
