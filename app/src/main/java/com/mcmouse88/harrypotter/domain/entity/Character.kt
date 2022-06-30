@@ -17,7 +17,5 @@ data class Character(
     val name: String,
     val patronus: String,
     val species: String,
-    val wand: Wand,
-    val wizard: Boolean,
-    val yearOfBirth: Int
+    val wizard: Boolean
 )

@@ -6,7 +6,7 @@ interface UseCaseRepository {
 
     suspend fun addToFavoriteUseCase(character: Character)
 
-    suspend fun deleteFromFavoriteUseCase(character: Character)
+    suspend fun deleteFromFavoriteUseCase(characterItem: Character)
 
     fun getCharacterDetail(): Character
 

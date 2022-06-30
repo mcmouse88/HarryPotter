@@ -1,4 +1,11 @@
 package com.mcmouse88.harrypotter.domain.usecase
 
-class AddToFavoriteUseCase {
+import com.mcmouse88.harrypotter.domain.entity.Character
+import com.mcmouse88.harrypotter.domain.usecaserepository.UseCaseRepository
+
+class AddToFavoriteUseCase(private val repository: UseCaseRepository) {
+
+    suspend operator fun invoke(character: Character) {
+        repository.addToFavoriteUseCase(character)
+    }
 }
