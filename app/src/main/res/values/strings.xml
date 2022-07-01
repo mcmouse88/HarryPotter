@@ -6,8 +6,9 @@
     <string name="status">Status: %s</string>
     <string name="ancestry">Ancestry: %s</string>
     <string name="house">House: %s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="character_name">%s</string>
     <string name="favorites">Favorites</string>
+    <string name="back">Back</string>
+    <string name="avatar">Avatar</string>
+    <string name="gender">Gender</string>
 </resources>

@@ -28,6 +28,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="32dp"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_backspace_24" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -42,7 +43,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_detail"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars"
+        android:contentDescription="@string/avatar" />
 
     <TextView
         android:id="@+id/tv_name_detail"
@@ -63,7 +65,8 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_name_detail"
         app:layout_constraintStart_toEndOf="@id/tv_name_detail"
         app:layout_constraintTop_toTopOf="@id/tv_name_detail"
-        tools:src="@drawable/ic_male_24" />
+        tools:src="@drawable/ic_male_24"
+        android:contentDescription="@string/gender" />
 
     <TextView
         android:id="@+id/tv_birthday_detail"
@@ -132,7 +135,8 @@
         android:src="@drawable/ic_favorite_border_24"
         app:layout_constraintBottom_toBottomOf="@id/iv_gender_detail"
         app:layout_constraintEnd_toEndOf="@id/iv_image_detail"
-        app:layout_constraintTop_toTopOf="@id/iv_gender_detail" />
+        app:layout_constraintTop_toTopOf="@id/iv_gender_detail"
+        android:contentDescription="@string/favorites" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

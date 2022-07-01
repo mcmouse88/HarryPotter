@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.mcmouse88.harrypotter.databinding.FragmentFavoriteBinding
 import com.mcmouse88.harrypotter.presentation.rvadapter.MainAdapter
 import com.mcmouse88.harrypotter.presentation.viewmodel.FavoriteViewModel
+import com.mcmouse88.harrypotter.presentation.viewmodel.factory.FavoriteViewModelFactory
 
 class FavoriteFragment : Fragment() {
 
@@ -17,7 +18,11 @@ class FavoriteFragment : Fragment() {
     private val binding: FragmentFavoriteBinding
         get() = _binding ?: throw NullPointerException("FragmentFavoriteBinding is null")
 
-    private val viewModel: FavoriteViewModel by viewModels()
+    private val factory by lazy {
+        FavoriteViewModelFactory(requireActivity().application)
+    }
+
+    private val viewModel: FavoriteViewModel by viewModels { factory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +46,18 @@ class FavoriteFragment : Fragment() {
         rvFavorite.adapter = adapter
         viewModel.listFromDb.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+        }
+        getDetailInfo(adapter)
+    }
+
+    private fun getDetailInfo(adapter: MainAdapter) {
+        adapter.characterItemClick = {
+            viewModel.getDetailCharacter(it) { character ->
+                findNavController().navigate(
+                    FavoriteFragmentDirections
+                        .actionFavoriteFragmentToDetailFragment(character)
+                )
+            }
         }
     }
 

@@ -17,7 +17,7 @@ class DataBaseModelMapper {
             ancestry = character.ancestry
         )
 
-    fun mapdbModelToEntity(dbModel: DatabaseCharacterModel) =
+    private fun mapDbModelToEntity(dbModel: DatabaseCharacterModel) =
         Character(
             alive = dbModel.alive,
             dateOfBirth = dbModel.dateOfBirth,
@@ -30,6 +30,6 @@ class DataBaseModelMapper {
         )
 
     fun mapListDbModelToListEntities(list: List<DatabaseCharacterModel>) =
-        list.asSequence().map { mapdbModelToEntity(it) }.toList()
+        list.asSequence().map { mapDbModelToEntity(it) }.toList()
 
 }

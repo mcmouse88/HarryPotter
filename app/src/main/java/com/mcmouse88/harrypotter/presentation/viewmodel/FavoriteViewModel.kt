@@ -1,15 +1,17 @@
 package com.mcmouse88.harrypotter.presentation.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.mcmouse88.harrypotter.data.repository.UseCaseRepositoryImpl
+import androidx.lifecycle.ViewModel
+import com.mcmouse88.harrypotter.domain.entity.Character
+import com.mcmouse88.harrypotter.domain.usecase.GetCharacterDetailUseCase
 import com.mcmouse88.harrypotter.domain.usecase.GetCharacterListFromDbUseCase
 
-class FavoriteViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = UseCaseRepositoryImpl(application)
-    private val getCharacterListFromDbUseCase = GetCharacterListFromDbUseCase(repository)
-
+class FavoriteViewModel(
+    getCharacterListFromDbUseCase: GetCharacterListFromDbUseCase,
+    private val getCharacterDetailUseCase: GetCharacterDetailUseCase
+) : ViewModel() {
     val listFromDb = getCharacterListFromDbUseCase.invoke()
 
+    fun getDetailCharacter(character: Character, navigation: (Character) -> Unit) {
+        getCharacterDetailUseCase.invoke(character, navigation)
+    }
 }

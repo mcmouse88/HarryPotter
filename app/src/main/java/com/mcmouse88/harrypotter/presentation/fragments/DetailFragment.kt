@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentDetailBinding
 import com.mcmouse88.harrypotter.presentation.viewmodel.DetailViewModel
+import com.mcmouse88.harrypotter.presentation.viewmodel.factory.DetailViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 class DetailFragment : Fragment() {
 
@@ -20,11 +25,18 @@ class DetailFragment : Fragment() {
         get() = _binding ?: throw NullPointerException("FragmentDetailBinding is null")
 
     private val args by navArgs<DetailFragmentArgs>()
-    private val currentCharacter by lazy { args.characterArgs }
 
-    private val viewModel by lazy {
-        ViewModelProvider(this)[DetailViewModel::class.java]
+    private val currentCharacter by lazy {
+        args.characterArgs
     }
+
+    private var isFavorite by Delegates.notNull<Boolean>()
+
+    private val factory by lazy {
+       DetailViewModelFactory(requireActivity().application)
+    }
+
+    private val viewModel by viewModels<DetailViewModel> { factory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +52,6 @@ class DetailFragment : Fragment() {
         binding.ivBackDetail.setOnClickListener {
             findNavController().popBackStack()
         }
-
         addAndRemoveFromDb()
     }
 
@@ -58,6 +69,8 @@ class DetailFragment : Fragment() {
             tvStatusDetail.text = getString(R.string.status, formatStatus())
             tvAncestryDetail.text = getString(R.string.ancestry, currentCharacter.ancestry)
             tvHouseDetail.text = getString(R.string.house, currentCharacter.house)
+            if (isFavorite) ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_24)
+            else ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_border_24)
             if (currentCharacter.gender == "female") {
                 ivGenderDetail.setImageResource(R.drawable.ic_female_24)
             } else {
@@ -68,7 +81,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun addAndRemoveFromDb() {
-        var isFavorite = false
+        var isFavorite = isFavorite
         binding.ivFavoriteDetail.setOnClickListener {
             if (!isFavorite) {
                 viewModel.addToFavorite(currentCharacter)
@@ -86,6 +99,13 @@ class DetailFragment : Fragment() {
             "alive"
         } else {
             "dead"
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch(Dispatchers.IO) {
+             isFavorite = viewModel.getCharacterFromDb(currentCharacter.name)
         }
     }
 

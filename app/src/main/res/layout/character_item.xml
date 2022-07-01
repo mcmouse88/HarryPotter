@@ -20,7 +20,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            android:contentDescription="@string/avatar" />
 
         <TextView
             android:id="@+id/tv_name_main"
@@ -74,7 +75,8 @@
             app:layout_constraintStart_toEndOf="@id/tv_species_main"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            tools:src="@drawable/ic_male_24" />
+            tools:src="@drawable/ic_male_24"
+            android:contentDescription="@string/gender" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
