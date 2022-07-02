@@ -1,7 +1,7 @@
 package com.mcmouse88.harrypotter.presentation.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.mcmouse88.harrypotter.R
 
 class MainActivity : AppCompatActivity() {

@@ -1,6 +1,5 @@
 package com.mcmouse88.harrypotter.data.repository
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.mcmouse88.harrypotter.data.room.mapper.DataBaseModelMapper
