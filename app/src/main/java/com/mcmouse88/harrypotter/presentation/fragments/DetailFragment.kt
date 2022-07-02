@@ -1,5 +1,6 @@
 package com.mcmouse88.harrypotter.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +12,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
+import com.mcmouse88.harrypotter.data.di.appComponent
 import com.mcmouse88.harrypotter.databinding.FragmentDetailBinding
 import com.mcmouse88.harrypotter.presentation.viewmodel.DetailViewModel
 import com.mcmouse88.harrypotter.presentation.viewmodel.factory.DetailViewModelFactory
+import dagger.Lazy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class DetailFragment : Fragment() {
@@ -32,11 +36,16 @@ class DetailFragment : Fragment() {
 
     private var isFavorite by Delegates.notNull<Boolean>()
 
-    private val factory by lazy {
-       DetailViewModelFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var factory: Lazy<DetailViewModelFactory>
 
-    private val viewModel by viewModels<DetailViewModel> { factory }
+    private val viewModel by viewModels<DetailViewModel> { factory.get() }
+
+    override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
+        super.onAttach(context)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

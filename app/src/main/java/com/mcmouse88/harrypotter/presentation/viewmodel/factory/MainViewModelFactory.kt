@@ -1,18 +1,17 @@
 package com.mcmouse88.harrypotter.presentation.viewmodel.factory
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mcmouse88.harrypotter.data.network.ApiRepository
-import com.mcmouse88.harrypotter.data.repository.UseCaseRepositoryImpl
 import com.mcmouse88.harrypotter.domain.usecase.GetCharacterDetailUseCase
 import com.mcmouse88.harrypotter.presentation.viewmodel.MainViewModel
+import javax.inject.Inject
 
-class MainViewModelFactory(application: Application) : ViewModelProvider.Factory {
+class MainViewModelFactory @Inject constructor (
+    private val apiRepository: ApiRepository,
+    private val getCharacterDetailUseCase: GetCharacterDetailUseCase
+) : ViewModelProvider.Factory {
 
-    private val repository = UseCaseRepositoryImpl(application)
-    private val apiRepository = ApiRepository()
-    private val getCharacterDetailUseCase = GetCharacterDetailUseCase(repository)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

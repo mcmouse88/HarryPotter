@@ -10,6 +10,7 @@ import com.mcmouse88.harrypotter.domain.entity.Character
 import com.mcmouse88.harrypotter.domain.usecase.GetCharacterDetailUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MainViewModel(
     private val apiRepository: ApiRepository,

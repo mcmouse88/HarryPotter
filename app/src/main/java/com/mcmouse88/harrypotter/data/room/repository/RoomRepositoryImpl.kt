@@ -4,8 +4,9 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.mcmouse88.harrypotter.data.room.database.CharacterDataBase
 import com.mcmouse88.harrypotter.data.room.modeldb.DatabaseCharacterModel
+import javax.inject.Inject
 
-class RoomRepositoryImpl(
+class RoomRepositoryImpl @Inject constructor(
     application: Application
 ) : RoomRepository {
 

@@ -8,13 +8,13 @@ import com.mcmouse88.harrypotter.domain.usecase.CheckCharacterFromDbUseCase
 import com.mcmouse88.harrypotter.domain.usecase.DeleteFromFavoriteUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel(
+class DetailViewModel (
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
     private val getCharacterFromDbUseCase: CheckCharacterFromDbUseCase
 ) : ViewModel() {
-
 
     fun addToFavorite(character: Character) {
         viewModelScope.launch(Dispatchers.IO) {

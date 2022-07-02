@@ -9,10 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.mcmouse88.harrypotter.R
+import com.mcmouse88.harrypotter.data.di.appComponent
 import com.mcmouse88.harrypotter.databinding.FragmentMainBinding
 import com.mcmouse88.harrypotter.presentation.rvadapter.MainAdapter
 import com.mcmouse88.harrypotter.presentation.viewmodel.MainViewModel
 import com.mcmouse88.harrypotter.presentation.viewmodel.factory.MainViewModelFactory
+import dagger.Lazy
+import javax.inject.Inject
+import javax.inject.Provider
 
 class MainFragment : Fragment() {
 
@@ -20,11 +24,13 @@ class MainFragment : Fragment() {
     private val binding: FragmentMainBinding
         get() = _binding ?: throw NullPointerException("FragmentMainBinding is null")
 
-    private val factory by lazy { MainViewModelFactory(requireActivity().application) }
+    @Inject
+    lateinit var factory: Lazy<MainViewModelFactory>
 
-    private val viewModel by viewModels<MainViewModel> { factory }
+    private val viewModel by viewModels<MainViewModel> { factory.get() }
 
     override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
         super.onAttach(context)
         viewModel.getListCharacter()
     }

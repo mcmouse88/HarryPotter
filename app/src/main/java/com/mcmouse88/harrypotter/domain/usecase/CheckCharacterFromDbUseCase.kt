@@ -1,8 +1,9 @@
 package com.mcmouse88.harrypotter.domain.usecase
 
 import com.mcmouse88.harrypotter.domain.usecaserepository.UseCaseRepository
+import javax.inject.Inject
 
-class CheckCharacterFromDbUseCase(private val repository: UseCaseRepository) {
+class CheckCharacterFromDbUseCase @Inject constructor (private val repository: UseCaseRepository) {
 
     operator fun invoke(name: String): Boolean {
         return repository.checkCharacterFromDbUseCase(name)

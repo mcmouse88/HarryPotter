@@ -2,8 +2,9 @@ package com.mcmouse88.harrypotter.data.room.mapper
 
 import com.mcmouse88.harrypotter.data.room.modeldb.DatabaseCharacterModel
 import com.mcmouse88.harrypotter.domain.entity.Character
+import javax.inject.Inject
 
-class DataBaseModelMapper {
+class DataBaseModelMapper @Inject constructor() {
 
     fun mapEntityToDbModel(character: Character) =
         DatabaseCharacterModel(

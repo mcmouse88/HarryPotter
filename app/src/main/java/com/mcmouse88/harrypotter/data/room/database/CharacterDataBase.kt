@@ -8,7 +8,7 @@ import com.mcmouse88.harrypotter.data.room.dao.RoomDao
 import com.mcmouse88.harrypotter.data.room.modeldb.DatabaseCharacterModel
 import com.mcmouse88.harrypotter.domain.utils.Constants.DB_NAME
 
-@Database(entities = [DatabaseCharacterModel::class] , version = 2)
+@Database(entities = [DatabaseCharacterModel::class], version = 2, exportSchema = false)
 abstract class CharacterDataBase : RoomDatabase()  {
     abstract fun getRoomDao(): RoomDao
 

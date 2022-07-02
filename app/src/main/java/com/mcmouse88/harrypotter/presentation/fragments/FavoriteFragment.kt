@@ -1,5 +1,6 @@
 package com.mcmouse88.harrypotter.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.mcmouse88.harrypotter.data.di.appComponent
 import com.mcmouse88.harrypotter.databinding.FragmentFavoriteBinding
 import com.mcmouse88.harrypotter.presentation.rvadapter.MainAdapter
 import com.mcmouse88.harrypotter.presentation.viewmodel.FavoriteViewModel
 import com.mcmouse88.harrypotter.presentation.viewmodel.factory.FavoriteViewModelFactory
+import dagger.Lazy
+import javax.inject.Inject
 
 class FavoriteFragment : Fragment() {
 
@@ -18,11 +22,15 @@ class FavoriteFragment : Fragment() {
     private val binding: FragmentFavoriteBinding
         get() = _binding ?: throw NullPointerException("FragmentFavoriteBinding is null")
 
-    private val factory by lazy {
-        FavoriteViewModelFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var factory: Lazy<FavoriteViewModelFactory>
 
-    private val viewModel: FavoriteViewModel by viewModels { factory }
+    private val viewModel: FavoriteViewModel by viewModels { factory.get() }
+
+    override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +53,7 @@ class FavoriteFragment : Fragment() {
         val rvFavorite = binding.rvFavoriteFragment
         rvFavorite.adapter = adapter
         viewModel.listFromDb.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(it.asReversed())
         }
         getDetailInfo(adapter)
     }

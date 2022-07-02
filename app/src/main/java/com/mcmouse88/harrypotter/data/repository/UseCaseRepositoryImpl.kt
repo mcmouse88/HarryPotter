@@ -7,13 +7,13 @@ import com.mcmouse88.harrypotter.data.room.mapper.DataBaseModelMapper
 import com.mcmouse88.harrypotter.data.room.repository.RoomRepositoryImpl
 import com.mcmouse88.harrypotter.domain.entity.Character
 import com.mcmouse88.harrypotter.domain.usecaserepository.UseCaseRepository
+import javax.inject.Inject
 
-class UseCaseRepositoryImpl(
-    application: Application
+class UseCaseRepositoryImpl @Inject constructor(
+    private val roomRepository: RoomRepositoryImpl,
+    private val mapper: DataBaseModelMapper
 ) : UseCaseRepository {
 
-    private val roomRepository = RoomRepositoryImpl(application)
-    private val mapper = DataBaseModelMapper()
 
     override suspend fun addToFavoriteUseCase(character: Character) {
         val dbModel = mapper.mapEntityToDbModel(character)
@@ -38,5 +38,4 @@ class UseCaseRepositoryImpl(
             mapper.mapListDbModelToListEntities(it)
         }
     }
-
 }
