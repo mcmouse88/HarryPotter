@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentDetailBinding
 import com.mcmouse88.harrypotter.presentation.viewmodel.DetailViewModel
-import com.mcmouse88.harrypotter.presentation.viewmodel.factory.DetailViewModelFactory
+import com.mcmouse88.harrypotter.presentation.viewmodel.factory.MainViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
@@ -33,7 +33,7 @@ class DetailFragment : Fragment() {
     private var isFavorite by Delegates.notNull<Boolean>()
 
     private val factory by lazy {
-       DetailViewModelFactory(requireActivity().application)
+       MainViewModelFactory(requireActivity().application)
     }
 
     private val viewModel by viewModels<DetailViewModel> { factory }
