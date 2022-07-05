@@ -16,6 +16,7 @@ import com.mcmouse88.harrypotter.data.di.appComponent
 import com.mcmouse88.harrypotter.databinding.FragmentDetailBinding
 import com.mcmouse88.harrypotter.presentation.viewmodel.DetailViewModel
 import com.mcmouse88.harrypotter.presentation.viewmodel.factory.DetailViewModelFactory
+import com.mcmouse88.harrypotter.presentation.viewmodel.factory.MainViewModelFactory
 import dagger.Lazy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +38,7 @@ class DetailFragment : Fragment() {
     private var isFavorite by Delegates.notNull<Boolean>()
 
     @Inject
-    lateinit var factory: Lazy<DetailViewModelFactory>
+    lateinit var factory: Lazy<MainViewModelFactory>
 
     private val viewModel by viewModels<DetailViewModel> { factory.get() }
 

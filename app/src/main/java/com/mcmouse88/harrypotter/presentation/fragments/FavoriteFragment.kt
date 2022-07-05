@@ -13,6 +13,7 @@ import com.mcmouse88.harrypotter.databinding.FragmentFavoriteBinding
 import com.mcmouse88.harrypotter.presentation.rvadapter.MainAdapter
 import com.mcmouse88.harrypotter.presentation.viewmodel.FavoriteViewModel
 import com.mcmouse88.harrypotter.presentation.viewmodel.factory.FavoriteViewModelFactory
+import com.mcmouse88.harrypotter.presentation.viewmodel.factory.MainViewModelFactory
 import dagger.Lazy
 import javax.inject.Inject
 
@@ -23,7 +24,7 @@ class FavoriteFragment : Fragment() {
         get() = _binding ?: throw NullPointerException("FragmentFavoriteBinding is null")
 
     @Inject
-    lateinit var factory: Lazy<FavoriteViewModelFactory>
+    lateinit var factory: Lazy<MainViewModelFactory>
 
     private val viewModel: FavoriteViewModel by viewModels { factory.get() }
 
