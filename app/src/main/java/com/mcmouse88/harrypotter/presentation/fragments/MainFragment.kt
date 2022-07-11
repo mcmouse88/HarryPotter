@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentMainBinding
 import com.mcmouse88.harrypotter.presentation.rvadapter.MainAdapter
 import com.mcmouse88.harrypotter.presentation.viewmodel.MainViewModel
-import com.mcmouse88.harrypotter.presentation.viewmodel.factory.MainViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
 
@@ -20,13 +19,11 @@ class MainFragment : Fragment() {
     private val binding: FragmentMainBinding
         get() = _binding ?: throw NullPointerException("FragmentMainBinding is null")
 
-    private val factory by lazy { MainViewModelFactory(requireActivity().application) }
-
-    private val viewModel by viewModels<MainViewModel> { factory }
+    private val mainViewModel by viewModel<MainViewModel>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel.getListCharacter()
+        mainViewModel.getListCharacter()
     }
 
     override fun onCreateView(
@@ -49,7 +46,7 @@ class MainFragment : Fragment() {
         val rvCharacterMain = binding.rvMainFragment
         val adapter = MainAdapter()
         rvCharacterMain.adapter = adapter
-        viewModel.listCharacter.observe(viewLifecycleOwner) {
+        mainViewModel.listCharacter.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
         getDetailInfo(adapter)
@@ -57,7 +54,7 @@ class MainFragment : Fragment() {
 
     private fun getDetailInfo(adapter: MainAdapter) {
         adapter.characterItemClick = {
-            viewModel.getDetailCharacter(it) { character ->
+            mainViewModel.getDetailCharacter(it) { character ->
                 findNavController().navigate(
                     MainFragmentDirections
                         .actionMainFragmentToDetailFragment(character)
