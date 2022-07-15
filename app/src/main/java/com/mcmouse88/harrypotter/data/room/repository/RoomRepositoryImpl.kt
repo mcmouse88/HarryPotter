@@ -1,15 +1,16 @@
 package com.mcmouse88.harrypotter.data.room.repository
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.mcmouse88.harrypotter.data.room.database.CharacterDataBase
 import com.mcmouse88.harrypotter.data.room.modeldb.DatabaseCharacterModel
 
 class RoomRepositoryImpl(
-    application: Application
+    context: Context
 ) : RoomRepository {
 
-    private val roomDao = CharacterDataBase.getInstance(application).getRoomDao()
+    private val roomDao = CharacterDataBase.getInstance(context).getRoomDao()
 
     override val allCharacterFromDb: LiveData<List<DatabaseCharacterModel>>
         get() = roomDao.getAllCharacterFromDb()

@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentDetailBinding
 import com.mcmouse88.harrypotter.presentation.viewmodel.DetailViewModel
-import com.mcmouse88.harrypotter.presentation.viewmodel.factory.MainViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
@@ -32,11 +31,8 @@ class DetailFragment : Fragment() {
 
     private var isFavorite by Delegates.notNull<Boolean>()
 
-    private val factory by lazy {
-       MainViewModelFactory(requireActivity().application)
-    }
 
-    private val viewModel by viewModels<DetailViewModel> { factory }
+    private val detailViewModel by viewModels<DetailViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,10 +80,10 @@ class DetailFragment : Fragment() {
         var isFavorite = isFavorite
         binding.ivFavoriteDetail.setOnClickListener {
             if (!isFavorite) {
-                viewModel.addToFavorite(currentCharacter)
+                detailViewModel.addToFavorite(currentCharacter)
                 binding.ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_24)
             } else {
-                viewModel.deleteFromFavorite(currentCharacter)
+                detailViewModel.deleteFromFavorite(currentCharacter)
                 binding.ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_border_24)
             }
             isFavorite = !isFavorite
@@ -105,7 +101,7 @@ class DetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
-             isFavorite = viewModel.getCharacterFromDb(currentCharacter.name)
+             isFavorite = detailViewModel.getCharacterFromDb(currentCharacter.name)
         }
     }
 

@@ -8,10 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.mcmouse88.harrypotter.data.network.ApiRepository
 import com.mcmouse88.harrypotter.domain.entity.Character
 import com.mcmouse88.harrypotter.domain.usecase.GetCharacterDetailUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val apiRepository: ApiRepository,
     private val getCharacterDetailUseCase: GetCharacterDetailUseCase
 ) : ViewModel() {
