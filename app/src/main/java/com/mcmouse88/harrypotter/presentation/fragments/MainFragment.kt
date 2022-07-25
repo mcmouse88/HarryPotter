@@ -23,16 +23,12 @@ class MainFragment : Fragment() {
 
     private val mainViewModel by viewModels<MainViewModel>()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainViewModel.getListCharacter()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
+        mainViewModel.getListCharacter()
         return binding.root
     }
 
