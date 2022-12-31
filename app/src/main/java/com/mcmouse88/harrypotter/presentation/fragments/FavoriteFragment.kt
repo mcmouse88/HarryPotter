@@ -1,53 +1,48 @@
 package com.mcmouse88.harrypotter.presentation.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentFavoriteBinding
 import com.mcmouse88.harrypotter.presentation.rvadapter.MainAdapter
 import com.mcmouse88.harrypotter.presentation.viewmodel.FavoriteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class FavoriteFragment : Fragment() {
+@AndroidEntryPoint
+class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding: FragmentFavoriteBinding
         get() = _binding ?: throw NullPointerException("FragmentFavoriteBinding is null")
 
-    private val favoriteViewModel by viewModels<FavoriteViewModel>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val viewModel by viewModels<FavoriteViewModel>()
+    private val adapter = MainAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentFavoriteBinding.bind(view)
+        binding.rvFavoriteFragment.adapter = adapter
+
+        setupObserver()
+        setupListener()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    private fun setupListener() {
         binding.ivBackFavorite.setOnClickListener {
             findNavController().popBackStack()
         }
-        setupRecyclerView()
-    }
 
-    private fun setupRecyclerView() {
-        val adapter = MainAdapter()
-        val rvFavorite = binding.rvFavoriteFragment
-        rvFavorite.adapter = adapter
-        favoriteViewModel.listFromDb.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-        getDetailInfo(adapter)
-    }
-
-    private fun getDetailInfo(adapter: MainAdapter) {
         adapter.characterItemClick = {
-            favoriteViewModel.getDetailCharacter(it) { character ->
+            viewModel.getDetailCharacter(it) { character ->
                 findNavController().navigate(
                     FavoriteFragmentDirections
                         .actionFavoriteFragmentToDetailFragment(character)
@@ -56,8 +51,11 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    private fun setupObserver() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.listFromDb.collect { list ->
+                adapter.submitList(list)
+            }
+        }
     }
 }

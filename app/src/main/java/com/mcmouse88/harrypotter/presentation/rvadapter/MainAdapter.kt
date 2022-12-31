@@ -2,18 +2,16 @@ package com.mcmouse88.harrypotter.presentation.rvadapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.CharacterItemBinding
 import com.mcmouse88.harrypotter.domain.entity.Character
+import com.mcmouse88.harrypotter.domain.utils.Constants.FEMALE_STATUS
 
 class MainAdapter : ListAdapter<Character, MainAdapter.MainAdapterViewHolder>(CharacterItemDiffCallBack()) {
-
-    inner class MainAdapterViewHolder(
-        val binding: CharacterItemBinding
-    ) : RecyclerView.ViewHolder(binding.root)
 
     var characterItemClick: ((Character) -> Unit)? = null
 
@@ -35,15 +33,35 @@ class MainAdapter : ListAdapter<Character, MainAdapter.MainAdapterViewHolder>(Ch
                 tvNameMain.text = character.name
                 tvBirthdayMain.text = character.dateOfBirth
                 tvSpeciesMain.text = character.species
-                if (character.gender == "female") {
+                if (character.gender == FEMALE_STATUS) {
                     ivGenderMain.setImageResource(R.drawable.ic_female_24)
                 } else {
                     ivGenderMain.setImageResource(R.drawable.ic_male_24)
                 }
-                Glide.with(root).load(character.image).into(ivImageMain)
+                Glide.with(root)
+                    .load(character.image)
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_placeholder)
+                    .into(ivImageMain)
 
                 root.setOnClickListener { characterItemClick?.invoke(character) }
             }
         }
+    }
+
+    inner class MainAdapterViewHolder(
+        val binding: CharacterItemBinding
+    ) : RecyclerView.ViewHolder(binding.root)
+
+    class CharacterItemDiffCallBack : DiffUtil.ItemCallback<Character>() {
+
+        override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
+            return oldItem.name == newItem.name
+        }
+
+        override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
+            return oldItem == newItem
+        }
+
     }
 }

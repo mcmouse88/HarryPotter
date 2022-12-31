@@ -1,30 +1,27 @@
 package com.mcmouse88.harrypotter.data.room.repository
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.LiveData
-import com.mcmouse88.harrypotter.data.room.database.CharacterDataBase
+import com.mcmouse88.harrypotter.data.room.dao.CharacterDao
 import com.mcmouse88.harrypotter.data.room.modeldb.DatabaseCharacterModel
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class RoomRepositoryImpl(
-    context: Context
+class RoomRepositoryImpl @Inject constructor(
+    private val characterDao: CharacterDao
 ) : RoomRepository {
 
-    private val roomDao = CharacterDataBase.getInstance(context).getRoomDao()
+    override val allCharacterFromDb: Flow<List<DatabaseCharacterModel>>
+        get() = characterDao.getAllCharacterFromDb()
 
-    override val allCharacterFromDb: LiveData<List<DatabaseCharacterModel>>
-        get() = roomDao.getAllCharacterFromDb()
-
-    override fun checkCharacterFromDb(name: String): Boolean =
-        roomDao.checkCharacterOnDb(name)
+    override suspend fun checkCharacterFromDb(name: String): Boolean =
+        characterDao.checkCharacterOnDb(name)
 
 
     override suspend fun insertCharacter(character: DatabaseCharacterModel) {
-        roomDao.insertCharacter(character)
+        characterDao.insertCharacter(character)
     }
 
     override suspend fun deleteCharacter(character: DatabaseCharacterModel) {
-        roomDao.deleteCharacter(character)
+        characterDao.deleteCharacter(character)
     }
 
 }

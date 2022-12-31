@@ -9,5 +9,4 @@ import dagger.hilt.android.HiltAndroidApp
  * [HiltAndroidApp], и Hilt сам сгенерирует необходимый код
  */
 @HiltAndroidApp
-class AppComponent : Application() {
-}
+class AppComponent : Application()

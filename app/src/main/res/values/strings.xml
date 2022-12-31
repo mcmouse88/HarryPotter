@@ -11,4 +11,6 @@
     <string name="back">Back</string>
     <string name="avatar">Avatar</string>
     <string name="gender">Gender</string>
+    <string name="alive">alive</string>
+    <string name="dead">dead</string>
 </resources>
