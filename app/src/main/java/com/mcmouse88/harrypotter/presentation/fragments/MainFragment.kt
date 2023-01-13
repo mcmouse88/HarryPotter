@@ -9,10 +9,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentMainBinding
 import com.mcmouse88.harrypotter.presentation.rvadapter.MainAdapter
+import com.mcmouse88.harrypotter.presentation.viewmodel.BaseViewModel
+import com.mcmouse88.harrypotter.presentation.viewmodel.BaseViewModel.StateScreen
 import com.mcmouse88.harrypotter.presentation.viewmodel.MainViewModel
+import com.mcmouse88.harrypotter.utils.observeFlow
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -51,19 +55,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun setupObserver() {
-        lifecycleScope.launchWhenStarted {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.screenState.collectLatest { state ->
-                    when(state) {
-                        MainViewModel.StateScreen.Content -> {
-                            binding.rvMainFragment.isVisible = true
-                            binding.progress.root.isVisible = false
-                        }
-                        MainViewModel.StateScreen.Loading -> {
-                            binding.rvMainFragment.isVisible = false
-                            binding.progress.root.isVisible = true
-                        }
-                    }
+
+        viewModel.screenState.observeFlow(viewLifecycleOwner) { state ->
+            binding.rvMainFragment.isVisible = state is StateScreen.Content
+            binding.progress.root.isVisible = state is StateScreen.Loading
+            binding.empty.root.isVisible = state is StateScreen.Empty
+        }
+
+        viewModel.commands.observeFlow(viewLifecycleOwner) { command ->
+            when (command) {
+                is BaseViewModel.Commands.ShowErrorMessage -> {
+                    Snackbar.make(binding.root, command.message, Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
@@ -81,7 +83,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         _binding = null
+        super.onDestroy()
     }
 }

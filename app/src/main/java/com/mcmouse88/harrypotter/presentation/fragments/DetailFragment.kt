@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentDetailBinding
 import com.mcmouse88.harrypotter.domain.entity.Character
-import com.mcmouse88.harrypotter.domain.utils.Constants.FEMALE_STATUS
+import com.mcmouse88.harrypotter.utils.Constants.FEMALE_STATUS
 import com.mcmouse88.harrypotter.presentation.viewmodel.DetailViewModel
 import com.mcmouse88.harrypotter.presentation.viewmodel.viewModelCreator
 import dagger.hilt.android.AndroidEntryPoint

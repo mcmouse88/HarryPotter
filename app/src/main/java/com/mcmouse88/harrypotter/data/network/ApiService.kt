@@ -1,7 +1,7 @@
 package com.mcmouse88.harrypotter.data.network
 
 import com.mcmouse88.harrypotter.domain.entity.Character
-import com.mcmouse88.harrypotter.domain.utils.Constants.END_POINT
+import com.mcmouse88.harrypotter.utils.Constants.END_POINT
 import retrofit2.Response
 import retrofit2.http.GET
 

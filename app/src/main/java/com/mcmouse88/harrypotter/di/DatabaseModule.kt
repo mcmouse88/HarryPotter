@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.mcmouse88.harrypotter.data.room.dao.CharacterDao
 import com.mcmouse88.harrypotter.data.room.database.CharacterDatabase
-import com.mcmouse88.harrypotter.domain.utils.Constants.DB_NAME
+import com.mcmouse88.harrypotter.utils.Constants.DB_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

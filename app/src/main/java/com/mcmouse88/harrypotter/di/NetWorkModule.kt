@@ -1,7 +1,7 @@
 package com.mcmouse88.harrypotter.di
 
+import com.mcmouse88.harrypotter.BuildConfig
 import com.mcmouse88.harrypotter.data.network.ApiService
-import com.mcmouse88.harrypotter.domain.utils.Constants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -66,7 +66,7 @@ class NetWorkModule {
         okHttpClient: OkHttpClient
     ): ApiService {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(factory)
             .build()

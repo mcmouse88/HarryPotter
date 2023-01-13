@@ -5,6 +5,8 @@ import com.mcmouse88.harrypotter.data.room.mapper.DataBaseModelMapper
 import com.mcmouse88.harrypotter.data.room.repository.RoomRepository
 import com.mcmouse88.harrypotter.domain.entity.Character
 import com.mcmouse88.harrypotter.domain.usecaserepository.UseCaseRepository
+import com.mcmouse88.harrypotter.utils.AppExceptions.EmptyBodyException
+import com.mcmouse88.harrypotter.utils.wrapAppException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
@@ -15,8 +17,10 @@ class UseCaseRepositoryImpl @Inject constructor(
     private val mapper: DataBaseModelMapper
 ) : UseCaseRepository {
 
-    override suspend fun readAllCharacter(): List<Character>? {
-        return apiService.getListCharacterFromApi().body()
+    override suspend fun readAllCharacter(): List<Character> = wrapAppException {
+        val response = apiService.getListCharacterFromApi()
+        if (response.body() == null) throw EmptyBodyException()
+        return@wrapAppException response.body()!!
     }
 
     override suspend fun addToFavoriteUseCase(character: Character) {

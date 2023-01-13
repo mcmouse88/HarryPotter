@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.CharacterItemBinding
 import com.mcmouse88.harrypotter.domain.entity.Character
-import com.mcmouse88.harrypotter.domain.utils.Constants.FEMALE_STATUS
+import com.mcmouse88.harrypotter.utils.Constants.FEMALE_STATUS
 
 class MainAdapter : ListAdapter<Character, MainAdapter.MainAdapterViewHolder>(CharacterItemDiffCallBack()) {
 

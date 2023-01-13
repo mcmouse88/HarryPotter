@@ -3,7 +3,7 @@ package com.mcmouse88.harrypotter.data.room.modeldb
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mcmouse88.harrypotter.domain.utils.Constants.TABLE_NAME
+import com.mcmouse88.harrypotter.utils.Constants.TABLE_NAME
 
 @Entity(tableName = TABLE_NAME)
 data class DatabaseCharacterModel(
