@@ -1,24 +1,24 @@
 package com.mcmouse88.harrypotter.presentation.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.mcmouse88.harrypotter.R
 import com.mcmouse88.harrypotter.databinding.FragmentDetailBinding
+import com.mcmouse88.harrypotter.domain.entity.Character
+import com.mcmouse88.harrypotter.utils.Constants.FEMALE_STATUS
 import com.mcmouse88.harrypotter.presentation.viewmodel.DetailViewModel
-import com.mcmouse88.harrypotter.presentation.viewmodel.factory.MainViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.mcmouse88.harrypotter.presentation.viewmodel.viewModelCreator
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class DetailFragment : Fragment() {
+@AndroidEntryPoint
+class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding: FragmentDetailBinding
@@ -26,39 +26,45 @@ class DetailFragment : Fragment() {
 
     private val args by navArgs<DetailFragmentArgs>()
 
-    private val currentCharacter by lazy {
-        args.characterArgs
-    }
-
     private var isFavorite by Delegates.notNull<Boolean>()
 
-    private val factory by lazy {
-       MainViewModelFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var factory: DetailViewModel.Factory
 
-    private val viewModel by viewModels<DetailViewModel> { factory }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDetailBinding.inflate(inflater, container, false)
-        return binding.root
+    private val viewModel: DetailViewModel by viewModelCreator {
+        factory.create(args.characterArgs.name)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fillLayout()
-        binding.ivBackDetail.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        addAndRemoveFromDb()
+        _binding = FragmentDetailBinding.bind(view)
+        val currentCharacter = args.characterArgs
+        setupObserver()
+        fillLayout(currentCharacter)
+        setupListeners(currentCharacter)
     }
 
-    private fun fillLayout() {
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    private fun setupObserver() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.isFavorite.collect { isFavoriteFlow ->
+                if (isFavoriteFlow) binding.ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_24)
+                else binding.ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_border_24)
+                isFavorite = isFavoriteFlow
+            }
+        }
+    }
+
+    private fun fillLayout(currentCharacter: Character) {
         binding.apply {
             Glide.with(this@DetailFragment)
                 .load(currentCharacter.image)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .into(ivImageDetail)
             tvNameDetail.text = currentCharacter.name
             tvBirthdayDetail.text = getString(
@@ -66,12 +72,10 @@ class DetailFragment : Fragment() {
                 currentCharacter.dateOfBirth
             )
             tvSpeciesDetail.text = getString(R.string.species, currentCharacter.species)
-            tvStatusDetail.text = getString(R.string.status, formatStatus())
+            tvStatusDetail.text = getString(R.string.status, formatStatus(currentCharacter))
             tvAncestryDetail.text = getString(R.string.ancestry, currentCharacter.ancestry)
             tvHouseDetail.text = getString(R.string.house, currentCharacter.house)
-            if (isFavorite) ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_24)
-            else ivFavoriteDetail.setImageResource(R.drawable.ic_favorite_border_24)
-            if (currentCharacter.gender == "female") {
+            if (currentCharacter.gender == FEMALE_STATUS) {
                 ivGenderDetail.setImageResource(R.drawable.ic_female_24)
             } else {
                 ivGenderDetail.setImageResource(R.drawable.ic_male_24)
@@ -80,8 +84,7 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun addAndRemoveFromDb() {
-        var isFavorite = isFavorite
+    private fun setupListeners(currentCharacter: Character) {
         binding.ivFavoriteDetail.setOnClickListener {
             if (!isFavorite) {
                 viewModel.addToFavorite(currentCharacter)
@@ -92,25 +95,17 @@ class DetailFragment : Fragment() {
             }
             isFavorite = !isFavorite
         }
+
+        binding.ivBackDetail.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
-    private fun formatStatus(): String {
+    private fun formatStatus(currentCharacter: Character): String {
          return if (currentCharacter.alive) {
-            "alive"
+            getString(R.string.alive)
         } else {
-            "dead"
+            getString(R.string.dead)
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleScope.launch(Dispatchers.IO) {
-             isFavorite = viewModel.getCharacterFromDb(currentCharacter.name)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

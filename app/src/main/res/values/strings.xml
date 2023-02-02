@@ -11,4 +11,12 @@
     <string name="back">Back</string>
     <string name="avatar">Avatar</string>
     <string name="gender">Gender</string>
+    <string name="alive">alive</string>
+    <string name="dead">dead</string>
+    <string name="connection_error">Can\'t connect to the server</string>
+    <string name="network_error">Error network connection</string>
+    <string name="load_error">Can\'t load data from server</string>
+    <string name="data_error">Can\'t load data</string>
+    <string name="parse_error">Can\'t parse response</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>
