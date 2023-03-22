@@ -38,7 +38,7 @@ class MainAdapter : ListAdapter<Character, MainAdapter.MainAdapterViewHolder>(Ch
                 } else {
                     ivGenderMain.setImageResource(R.drawable.ic_male_24)
                 }
-                Glide.with(root)
+                Glide.with(root.context)
                     .load(character.image)
                     .placeholder(R.drawable.ic_placeholder)
                     .error(R.drawable.ic_placeholder)

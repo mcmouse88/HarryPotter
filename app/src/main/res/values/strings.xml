@@ -19,4 +19,5 @@
     <string name="data_error">Can\'t load data</string>
     <string name="parse_error">Can\'t parse response</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="haven_favorite_characters">You haven\'t had any favorite characters</string>
 </resources>

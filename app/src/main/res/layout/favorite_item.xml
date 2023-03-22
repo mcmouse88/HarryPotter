@@ -26,16 +26,25 @@
 
         <TextView
             android:id="@+id/tv_name_main"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/iv_image_main"
-            android:layout_marginStart="16dp"
+            android:layout_marginHorizontal="16dp"
             android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="@id/iv_image_main"
+            app:layout_constraintEnd_toStartOf="@id/label_favorite"
             tools:text="Harry Potter"
             android:textSize="18sp"
             android:ellipsize="end"
-            android:lines="1" />
+            android:lines="2" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/label_favorite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/ic_favorite_24"
+            app:layout_constraintTop_toTopOf="@id/tv_name_main"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/tv_birthday_main"
@@ -80,8 +89,4 @@
             android:contentDescription="@string/gender" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 </androidx.cardview.widget.CardView>

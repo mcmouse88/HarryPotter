@@ -5,9 +5,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.mcmouse88.harrypotter.R
@@ -18,7 +15,6 @@ import com.mcmouse88.harrypotter.presentation.viewmodel.BaseViewModel.StateScree
 import com.mcmouse88.harrypotter.presentation.viewmodel.MainViewModel
 import com.mcmouse88.harrypotter.utils.observeFlow
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -43,14 +39,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val rvCharacterMain = binding.rvMainFragment
         val adapter = MainAdapter()
         rvCharacterMain.adapter = adapter
-        lifecycleScope.launchWhenStarted {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.listCharacter.collectLatest {
-                    adapter.submitList(it)
-                }
-            }
+        viewModel.listCharacter.observeFlow(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
-
         getDetailInfo(adapter)
     }
 
